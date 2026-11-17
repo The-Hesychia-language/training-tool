@@ -130,7 +130,17 @@ fn check(exercise: &Exercise, source: &Path) -> Result<Result<(), String>, Strin
         .join("\n");
     let whole = format!("{}\n{tests}\n", read(source)?.trim_end());
     fs::write(dir.join(file), whole).map_err(|e| format!("{}: {e}", dir.display()))?;
-    let shown = |text: &str| text.replace(file, &source.display().to_string());
+    // A failure names its line in the test, which the learner does not see: only what the
+    // compiler says about the exercise's own lines is kept.
+    let given = read(source)?.trim_end().lines().count();
+    let shown = |text: &str| {
+        let hidden = |line: &str| {
+            line.strip_prefix(&format!("      at {file}:"))
+                .is_some_and(|n| n.parse().is_ok_and(|n: usize| n > given))
+        };
+        let kept: Vec<&str> = text.lines().filter(|line| !hidden(line)).collect();
+        kept.join("\n").replace(file, &source.display().to_string()) + "\n"
+    };
 
     let expected = marked(&checks, "# expect: ");
     if !expected.is_empty() {
