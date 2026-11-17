@@ -3,20 +3,25 @@
 
 use std::collections::HashSet;
 use std::fs;
+use std::io::{self, Write};
 use std::path::{Path, PathBuf};
 use std::process::{Command, ExitCode};
 use std::thread::sleep;
 use std::time::{Duration, SystemTime};
 
+use crossterm::cursor::MoveTo;
+use crossterm::event::{self, Event, KeyCode, KeyEventKind, KeyModifiers};
+use crossterm::execute;
+use crossterm::terminal::{self, Clear, ClearType};
+
 const HELP: &str = "hsy-train: learn Hesychia by fixing and building small programs
 
-    hsy-train          checks the current exercise each time its file is saved
-    hsy-train list     the exercises, and which are done
-    hsy-train hint     a hint for the current exercise
-    hsy-train check    checks the current exercise once
+    hsy-train          the exercises: each is checked again when its file is saved
     hsy-train verify   for authors: every exercise fails as given, and its solution passes
 
 Run it in the training-tool folder. `hsy` must be installed; HSY names another compiler.";
+
+const KEYS: &str = "h:hint / l:list / c:check all / x:reset / q:quit ? ";
 
 /// An exercise: `exercises/<name>.hsy`, checked by `checks/<name>.hsy`.
 struct Exercise {
@@ -82,14 +87,16 @@ fn done() -> HashSet<String> {
     fs::read_to_string(PROGRESS).unwrap_or_default().lines().map(str::to_string).collect()
 }
 
+fn save_done(names: &HashSet<String>) -> Result<(), String> {
+    let mut names: Vec<&str> = names.iter().map(String::as_str).collect();
+    names.sort();
+    fs::write(PROGRESS, names.join("\n") + "\n").map_err(|e| format!("{PROGRESS}: {e}"))
+}
+
 fn mark_done(name: &str) -> Result<(), String> {
     let mut names = done();
-    if names.insert(name.to_string()) {
-        let mut names: Vec<String> = names.into_iter().collect();
-        names.sort();
-        fs::write(PROGRESS, names.join("\n") + "\n").map_err(|e| format!("{PROGRESS}: {e}"))?;
-    }
-    Ok(())
+    names.insert(name.to_string());
+    save_done(&names)
 }
 
 fn hsy() -> String {
@@ -162,38 +169,44 @@ fn modified(path: &Path) -> Option<SystemTime> {
     fs::metadata(path).and_then(|m| m.modified()).ok()
 }
 
-fn watch(all: &[Exercise]) -> Result<(), String> {
-    loop {
-        let Some(exercise) = current(all) else {
-            println!("\nEvery exercise is done. Well played!");
-            return Ok(());
-        };
-        let path = exercise.path();
-        let count = all.iter().filter(|e| done().contains(&e.name)).count();
-        println!("\n[{}/{}] {}", count + 1, all.len(), path.display());
-        let seen = modified(&path);
-        match check(exercise, &path)? {
-            Ok(()) => {
-                mark_done(&exercise.name)?;
-                println!("✓ done");
-            }
-            Err(why) => {
-                println!("{}", why.trim_end());
-                println!(
-                    "\nEdit {} and save it; `hsy-train hint` gives a hint. Ctrl-C stops.",
-                    path.display()
-                );
-                while modified(&path) == seen {
-                    sleep(Duration::from_millis(300));
-                }
-            }
-        }
+/// A key pressed within a short wait, if the terminal gives keys one by one.
+fn key() -> Option<char> {
+    let wait = Duration::from_millis(300);
+    if terminal::enable_raw_mode().is_err() {
+        sleep(wait);
+        return None;
     }
+    let mut pressed = None;
+    if event::poll(wait).unwrap_or(false)
+        && let Ok(Event::Key(k)) = event::read()
+        && k.kind == KeyEventKind::Press
+        && let KeyCode::Char(c) = k.code
+    {
+        // Ctrl-C does not interrupt while keys are read one by one: it quits.
+        pressed = Some(if k.modifiers.contains(KeyModifiers::CONTROL) && c == 'c' { 'q' } else { c });
+    }
+    let _ = terminal::disable_raw_mode();
+    pressed
 }
 
-fn list(all: &[Exercise]) {
+/// `Progress: [####>-----]  4/26`
+fn progress_bar(count: usize, total: usize) -> String {
+    const WIDTH: usize = 60;
+    let filled = (count * WIDTH).checked_div(total).unwrap_or(0);
+    let bar: String = (0..WIDTH)
+        .map(|i| match i {
+            i if i < filled => '#',
+            i if i == filled => '>',
+            _ => '-',
+        })
+        .collect();
+    format!("Progress: [{bar}]  {count}/{total}")
+}
+
+fn listing(all: &[Exercise]) -> String {
     let done = done();
     let now = current(all).map(|e| e.name.as_str());
+    let mut out = String::new();
     for exercise in all {
         let mark = if done.contains(&exercise.name) {
             "✓"
@@ -202,9 +215,108 @@ fn list(all: &[Exercise]) {
         } else {
             " "
         };
-        println!("{mark} {}", exercise.name);
+        out += &format!("{mark} {}\n", exercise.name);
     }
-    println!("{} of {} done", all.iter().filter(|e| done.contains(&e.name)).count(), all.len());
+    out
+}
+
+/// Checks every exercise again: those that pass are done, the others are not.
+fn check_all(all: &[Exercise]) -> Result<(), String> {
+    let mut passed = HashSet::new();
+    for (i, exercise) in all.iter().enumerate() {
+        print!("\rChecking {}/{}", i + 1, all.len());
+        let _ = io::stdout().flush();
+        if check(exercise, &exercise.path())?.is_ok() {
+            passed.insert(exercise.name.clone());
+        }
+    }
+    println!();
+    save_done(&passed)
+}
+
+/// Puts an exercise's file back as it was given, from the repository.
+fn reset(exercise: &Exercise) -> String {
+    let path = exercise.path();
+    let restored = Command::new("git").arg("checkout").arg("--").arg(&path).status();
+    match restored {
+        Ok(status) if status.success() => format!("{} is as it was given.", path.display()),
+        _ => format!("{} could not be reset: `git checkout` failed.", path.display()),
+    }
+}
+
+/// What the learner sees: the last result, a note (a hint, the list), then where they are.
+fn show(result: &str, note: &str, all: &[Exercise], exercise: Option<&Exercise>) {
+    let _ = execute!(io::stdout(), Clear(ClearType::All), MoveTo(0, 0));
+    for part in [result, note] {
+        if !part.is_empty() {
+            println!("{}\n", part.trim_end());
+        }
+    }
+    let count = all.iter().filter(|e| done().contains(&e.name)).count();
+    println!("{}", progress_bar(count, all.len()));
+    match exercise {
+        Some(exercise) => {
+            println!("Current exercise: {}\n", exercise.path().display());
+            print!("{KEYS}");
+        }
+        None => println!("\nEvery exercise is done. Well played!"),
+    }
+    let _ = io::stdout().flush();
+}
+
+fn watch(all: &[Exercise]) -> Result<(), String> {
+    let mut note = String::new();
+    loop {
+        let Some(exercise) = current(all) else {
+            show("", &note, all, None);
+            return Ok(());
+        };
+        let path = exercise.path();
+        let seen = modified(&path);
+        let result = match check(exercise, &path)? {
+            Ok(()) => {
+                mark_done(&exercise.name)?;
+                note = format!("✓ {} is done.", path.display());
+                continue;
+            }
+            Err(why) => why,
+        };
+        show(&result, &note, all, Some(exercise));
+        let hints = exercise.checks()?;
+        let hints = marked(&hints, "# hint: ");
+        let mut given = 0;
+        while modified(&path) == seen {
+            match key() {
+                Some('h') => {
+                    given = (given + 1).min(hints.len());
+                    note = hints[..given].iter().map(|h| format!("Hint: {h}\n")).collect();
+                    show(&result, &note, all, Some(exercise));
+                }
+                Some('l') => {
+                    note = listing(all);
+                    show(&result, &note, all, Some(exercise));
+                }
+                Some('c') => {
+                    println!();
+                    check_all(all)?;
+                    note = "Every exercise was checked again.".to_string();
+                    break;
+                }
+                Some('x') => {
+                    note = reset(exercise);
+                    break;
+                }
+                Some('q') => {
+                    println!();
+                    return Ok(());
+                }
+                _ => {}
+            }
+        }
+        if modified(&path) != seen {
+            note.clear();
+        }
+    }
 }
 
 /// Every exercise must fail as it is given, and pass with its solution.
@@ -237,29 +349,6 @@ fn run(command: Option<&str>) -> Result<bool, String> {
     let all = exercises()?;
     match command {
         None => watch(&all)?,
-        Some("list") => list(&all),
-        Some("hint") => match current(&all) {
-            Some(exercise) => {
-                println!("{}", exercise.path().display());
-                for hint in marked(&exercise.checks()?, "# hint: ") {
-                    println!("  {hint}");
-                }
-            }
-            None => println!("Every exercise is done."),
-        },
-        Some("check") => match current(&all) {
-            Some(exercise) => match check(exercise, &exercise.path())? {
-                Ok(()) => {
-                    mark_done(&exercise.name)?;
-                    println!("✓ {}", exercise.name);
-                }
-                Err(why) => {
-                    println!("{}", why.trim_end());
-                    return Ok(false);
-                }
-            },
-            None => println!("Every exercise is done."),
-        },
         Some("verify") => return verify(&all),
         Some(other) => return Err(format!("unknown command `{other}`\n\n{HELP}")),
     }

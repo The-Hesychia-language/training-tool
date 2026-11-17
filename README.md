@@ -19,14 +19,22 @@ cargo install --path .
 
 Run `hsy-train` in the `training-tool` folder, and open the file it names in your editor. Each time you save, the exercise is checked again; once it passes, the next one comes.
 
-| Command | What it does |
-| --- | --- |
-| `hsy-train` | Checks the current exercise each time its file is saved |
-| `hsy-train list` | The exercises, and which are done |
-| `hsy-train hint` | A hint for the current exercise |
-| `hsy-train check` | Checks the current exercise once |
+```
+Progress: [######>-----------------------------------------------------]  3/26
+Current exercise: exercises/01_basics/04_fizzbuzz.hsy
 
-Progress is kept in `.progress`; delete it to start again, and `git checkout exercises` brings the files back as they were. Stuck? `solutions/` holds one answer to each exercise.
+h:hint / l:list / c:check all / x:reset / q:quit ?
+```
+
+| Key | What it does |
+| --- | --- |
+| `h` | A hint for the current exercise; again for the next hint, when there is one |
+| `l` | The exercises, and which are done |
+| `c` | Checks every exercise again: those that pass are done, the others are not |
+| `x` | Puts the current exercise's file back as it was given (with `git checkout`) |
+| `q` | Quits; progress is kept in `.progress` |
+
+Stuck? `solutions/` holds one answer to each exercise.
 
 ## Chapters
 

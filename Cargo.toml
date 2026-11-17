@@ -1,6 +1,9 @@
 [package]
 name = "hsy-train"
 version = "0.1.0"
-edition = "2021"
+edition = "2024"
 rust-version = "1.88"
 description = "Exercises to learn the Hesychia language: fix programs, and build small ones"
+
+[dependencies]
+crossterm = "0.29.0"
