@@ -1,0 +1,17 @@
+# `fs.open(path, fs.Mode.Write)` opens a file to write, `fs.open(path)` to read.
+# `print(text, to=f)` writes a line, and `io.read(f)` reads the next one, giving
+# `None` at the end. A file is closed at the end of its scope, or by `io.close(f)`.
+#
+# BUILD: `save` writes each text of `lines` as a line of the file at `path`, and
+# `longest_line` reads that file back and gives its longest line ("" for an
+# empty file).
+
+import io
+from io import print
+import fs
+
+managed fn save(path: str, lines: vector[str]):
+    pass
+
+managed fn longest_line(path: str) -> str:
+    return ""

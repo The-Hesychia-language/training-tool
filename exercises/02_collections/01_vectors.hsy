@@ -1,0 +1,10 @@
+# A `vector` holds values of one type: `[1, 2, 3]`. `len(v)` is its length, `v[i]`
+# its item at position `i`, from 0. Reading past the end stops the program.
+#
+# FIX: `total` should add every item, but it stops on a fault.
+
+managed fn total(values: vector[i64]) -> i64:
+    sum = 0
+    for i in range(len(values) + 1):
+        sum += values[i]
+    return sum

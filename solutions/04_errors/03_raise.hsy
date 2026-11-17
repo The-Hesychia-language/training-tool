@@ -1,0 +1,7 @@
+managed struct Insufficient:
+    missing: i64
+
+managed fn withdraw(balance: i64, amount: i64) -> i64:
+    if amount > balance:
+        raise Insufficient(missing=amount - balance)
+    return balance - amount

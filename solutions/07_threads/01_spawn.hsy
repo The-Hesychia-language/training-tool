@@ -1,0 +1,12 @@
+from thread import spawn
+
+managed fn total(values: vector[i64]) -> i64:
+    sum = 0
+    for v in values:
+        sum += v
+    return sum
+
+managed fn sum_both(a: vector[i64], b: vector[i64]) -> i64:
+    first = spawn(total, a)
+    second = spawn(total, b)
+    return first.join() + second.join()

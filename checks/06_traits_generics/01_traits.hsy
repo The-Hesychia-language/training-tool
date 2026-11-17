@@ -1,0 +1,8 @@
+# hint: Add `method perimeter(&self) -> f64:` to `Square`, returning `self.side * 4.0`.
+from testing import equal
+
+@test
+managed fn square_is_a_shape():
+    s = Square(side=2.0)
+    equal(s.area(), 4.0)
+    equal(s.perimeter(), 8.0)

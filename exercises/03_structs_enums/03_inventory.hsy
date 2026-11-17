@@ -1,0 +1,22 @@
+# BUILD: a shop's stock. Complete the three methods of `Inventory`:
+#   add(name, count)  adds `count` items of that name, known or new;
+#   count(name)       how many of that name there are, 0 for an unknown one;
+#   total()           how many items there are in all.
+#
+# A method that changes `self` needs nothing special in `managed`. To go over a
+# dict: `for name, count in self.items.items():`.
+
+managed struct Inventory:
+    items: dict[str, i64]
+
+    method add(self, name: str, count: i64):
+        pass
+
+    method count(self, name: str) -> i64:
+        return 0
+
+    method total(self) -> i64:
+        return 0
+
+managed fn empty_inventory() -> Inventory:
+    return Inventory(items=dict[str, i64]())

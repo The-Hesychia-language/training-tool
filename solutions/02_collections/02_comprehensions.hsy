@@ -1,0 +1,2 @@
+managed fn even_squares(values: vector[i64]) -> vector[i64]:
+    return [x * x for x in values if x % 2 == 0]

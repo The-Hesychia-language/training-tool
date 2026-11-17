@@ -1,0 +1,7 @@
+# hint: Make `hits` an atomic: `hits = atomic(0)`, then `hits.add(1)` and `return hits.load()`.
+from testing import equal
+
+@test
+managed fn multiples_are_counted():
+    equal(multiples_of_three(10), 4)
+    equal(multiples_of_three(3000), 1000)

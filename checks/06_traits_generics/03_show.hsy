@@ -1,0 +1,8 @@
+# hint: Declare `manual struct Point(Show):` and add `method show(&self) -> str:`.
+# hint: The method can itself use an f-string: `f"({self.x}, {self.y})"`.
+from testing import equal
+
+@test
+managed fn point_shows_itself():
+    equal(f"{Point(x=1, y=2)}", "(1, 2)")
+    equal(f"at {Point(x=-3, y=0)}", "at (-3, 0)")

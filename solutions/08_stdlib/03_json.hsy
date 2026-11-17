@@ -1,0 +1,19 @@
+import fs
+import json
+from json import Value
+
+managed fn sum_of(path: str) -> f64:
+    f = fs.open(path)
+    value = json.load(f)
+    sum = 0.0
+    match value:
+        case Value.List(items):
+            for item in items:
+                match item:
+                    case Value.Number(number):
+                        sum += number
+                    case _:
+                        pass
+        case _:
+            pass
+    return sum

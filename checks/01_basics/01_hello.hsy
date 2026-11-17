@@ -1,0 +1,2 @@
+# hint: Add `from io import print` as the first line.
+# expect: Hello, Hesychia!

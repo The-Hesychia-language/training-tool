@@ -1,0 +1,2 @@
+# hint: A `const` cannot change. Declare `apples` as a plain variable: `apples = 3`.
+# expect: 7 apples

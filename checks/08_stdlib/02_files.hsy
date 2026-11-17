@@ -1,0 +1,12 @@
+# hint: In `save`: `f = fs.open(path, fs.Mode.Write)`, then `print(line, to=f)` for each line.
+# hint: In `longest_line`: loop on `line = io.read(f)` until it `is None`, keeping the longest.
+import fs as files
+from testing import equal
+
+@test
+managed fn lines_are_saved_and_read():
+    save("hsy-train-lines.txt", ["one", "three", "two"])
+    equal(longest_line("hsy-train-lines.txt"), "three")
+    save("hsy-train-lines.txt", vector[str]())
+    equal(longest_line("hsy-train-lines.txt"), "")
+    files.remove("hsy-train-lines.txt")

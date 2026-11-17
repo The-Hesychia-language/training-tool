@@ -1,0 +1,12 @@
+# A generic function works for any type `T`. Its body may only do what `T` is
+# known to allow, and bounds say what that is: `[T: Equal]` allows `==`,
+# `[T: Order]` allows `<`, `[T: Add]` allows `+`.
+#
+# FIX: `count_of` counts the items equal to `wanted`, in a vector of any type.
+
+manual fn count_of[T](values: &vector[T], wanted: &T) -> i64:
+    mut n: i64 = 0
+    for i in range(len(values)):
+        if values[i] == wanted:
+            n += 1
+    return n

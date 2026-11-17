@@ -1,0 +1,8 @@
+# hint: `re.find_all("[0-9]+", text)` gives the numbers as texts; `i64(t)` reads one.
+from testing import equal
+
+@test
+managed fn numbers_are_found():
+    equal(numbers_in("3 apples, 12 pears"), [3, 12])
+    equal(numbers_in("room 404, floor 4"), [404, 4])
+    equal(numbers_in("none"), vector[i64]())

@@ -1,0 +1,7 @@
+# hint: `range(len(values))` goes from 0 to the last position. `for v in values:` is simpler still.
+from testing import equal
+
+@test
+managed fn total_adds_every_item():
+    equal(total([1, 2, 3]), 6)
+    equal(total(vector[i64]()), 0)

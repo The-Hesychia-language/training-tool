@@ -1,0 +1,10 @@
+# A `dict` maps keys to values. `dict[str, i64]()` makes an empty one, `d[k] = v`
+# sets an entry, `k in d` tests a key, and `d[k] += 1` changes an entry that exists.
+# On text, `split()` cuts at spaces and `lower()` gives small letters.
+#
+# BUILD: `count_words` counts how many times each word appears in `text`, whatever
+# its capitals: count_words("The cat the") is {'the': 2, 'cat': 1}.
+
+managed fn count_words(text: str) -> dict[str, i64]:
+    counts = dict[str, i64]()
+    return counts

@@ -1,0 +1,12 @@
+# Your own errors are structs, raised with `raise`.
+#
+# BUILD: `withdraw` takes `amount` out of an account holding `balance`, and gives
+# what is left. When the account does not hold enough, it raises `Insufficient`,
+# saying how much is missing: withdraw(10, 25) raises Insufficient(missing=15).
+# For now it refuses every withdrawal.
+
+managed struct Insufficient:
+    missing: i64
+
+managed fn withdraw(balance: i64, amount: i64) -> i64:
+    raise Insufficient(missing=amount - balance)

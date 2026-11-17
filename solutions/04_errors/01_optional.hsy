@@ -1,0 +1,5 @@
+managed fn price_of(prices: dict[str, i64], name: str) -> i64:
+    price = prices.get(name)
+    if price is None:
+        return 0
+    return price

@@ -1,0 +1,8 @@
+from thread import atomic
+
+managed fn multiples_of_three(limit: i64) -> i64:
+    hits = atomic(0)
+    parallel for i in range(limit):
+        if i % 3 == 0:
+            hits.add(1)
+    return hits.load()

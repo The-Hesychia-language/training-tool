@@ -1,0 +1,17 @@
+# A channel carries values from one thread to another. `channel[i64]()` gives its
+# two ends: `tx.send(x)` puts a value in, `rx.receive()` waits for the next one,
+# and gives `None` once every sender is gone.
+#
+# BUILD: `produce` is written: it sends the squares of 1 to `n`. Complete
+# `sum_of_squares`, which starts `produce` in a thread, then adds what it
+# receives until the channel is finished: sum_of_squares(3) is 1 + 4 + 9.
+
+from thread import spawn, channel
+
+managed fn produce(tx: sender[i64], n: i64):
+    for i in range(1, n + 1):
+        tx.send(i * i)
+
+managed fn sum_of_squares(n: i64) -> i64:
+    tx, rx = channel[i64]()
+    return 0

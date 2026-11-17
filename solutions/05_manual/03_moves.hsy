@@ -1,0 +1,6 @@
+manual fn shout(owned text: str) -> str:
+    return text.upper() + "!"
+
+manual fn both(owned name: str) -> str:
+    const loud: str = shout(name.copy())
+    return f"{name} {loud}"

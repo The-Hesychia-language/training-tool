@@ -1,0 +1,15 @@
+# hint: `if amount > balance:` then `raise Insufficient(missing=amount - balance)`.
+from testing import equal, expect
+
+@test
+managed fn withdraw_gives_what_is_left():
+    equal(withdraw(100, 30), 70)
+    equal(withdraw(30, 30), 0)
+
+@test
+managed fn withdraw_refuses_too_much():
+    try:
+        withdraw(10, 25)
+        expect(False)
+    except Insufficient as e:
+        equal(e.missing, 15)

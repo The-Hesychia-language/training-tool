@@ -1,0 +1,4 @@
+import re
+
+managed fn numbers_in(text: str) -> vector[i64]:
+    return [i64(digits) for digits in re.find_all("[0-9]+", text)]

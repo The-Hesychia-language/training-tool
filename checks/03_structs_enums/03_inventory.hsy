@@ -1,0 +1,21 @@
+# hint: In `add`, test `name in self.items` to choose between `+=` and `=`.
+# hint: In `total`, loop with `for _name, count in self.items.items():`.
+from testing import equal
+
+@test
+managed fn inventory_counts_by_name():
+    stock = empty_inventory()
+    stock.add("nail", 10)
+    stock.add("screw", 4)
+    stock.add("nail", 5)
+    equal(stock.count("nail"), 15)
+    equal(stock.count("screw"), 4)
+    equal(stock.count("bolt"), 0)
+
+@test
+managed fn inventory_totals():
+    stock = empty_inventory()
+    equal(stock.total(), 0)
+    stock.add("nail", 10)
+    stock.add("screw", 4)
+    equal(stock.total(), 14)

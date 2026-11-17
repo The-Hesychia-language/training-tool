@@ -1,0 +1,16 @@
+# An enum is a value that is one of a few named cases. `match` runs the branch
+# of the case it finds, and the compiler checks that no case is forgotten.
+#
+# FIX: a traffic light goes Green, then Orange, then Red, then Green again.
+
+managed enum Light:
+    Green
+    Orange
+    Red
+
+managed fn after(light: Light) -> Light:
+    match light:
+        case Light.Green:
+            return Light.Orange
+        case Light.Orange:
+            return Light.Red

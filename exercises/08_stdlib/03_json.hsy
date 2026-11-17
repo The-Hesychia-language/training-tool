@@ -1,0 +1,23 @@
+# `json.load(f)` reads a file as a `json.Value`, an enum whose cases are the
+# kinds of JSON values: `Null`, `Bool(flag)`, `Number(number)`, `Text(text)`,
+# `List(items)` and `Object(fields)`, where `fields` is a dict. `match` takes
+# one apart:
+#
+#     match value:
+#         case Value.Number(number):
+#             ...
+#         case _:
+#             ...        # every other case
+#
+# BUILD: the file at `path` holds a list of numbers, such as [1, 2.5, 4].
+# `sum_of` gives their sum, and 0.0 when the file holds anything else. What is
+# not a number in the list is skipped.
+
+import fs
+import json
+from json import Value
+
+managed fn sum_of(path: str) -> f64:
+    f = fs.open(path)
+    value = json.load(f)
+    return 0.0

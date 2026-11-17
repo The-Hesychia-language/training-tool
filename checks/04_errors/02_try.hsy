@@ -1,0 +1,12 @@
+# hint: Put the `return i64(text)` in a `try:`, and `return -1` under `except ParseError as _e:`.
+from testing import equal
+
+@test
+managed fn to_number_reads_numbers():
+    equal(to_number("42"), 42)
+    equal(to_number("-7"), -7)
+
+@test
+managed fn to_number_refuses_the_rest():
+    equal(to_number("12x"), -1)
+    equal(to_number(""), -1)

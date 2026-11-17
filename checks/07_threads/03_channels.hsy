@@ -1,0 +1,9 @@
+# hint: Start it with `t = spawn(produce, tx, n)`: `tx` moves into the thread, and is gone when it ends.
+# hint: Loop on `got = rx.receive()` until `got is None`, adding `got` otherwise.
+from testing import equal
+
+@test
+managed fn squares_are_added():
+    equal(sum_of_squares(3), 14)
+    equal(sum_of_squares(100), 338350)
+    equal(sum_of_squares(0), 0)

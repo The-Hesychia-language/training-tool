@@ -1,0 +1,17 @@
+# `spawn(f, args...)` runs `f` in another thread, at the same time as the rest.
+# It gives a handle at once; `handle.join()` waits for `f` and gives its result.
+#
+# FIX: `sum_both` adds two vectors, each in a thread of its own.
+
+from thread import spawn
+
+managed fn total(values: vector[i64]) -> i64:
+    sum = 0
+    for v in values:
+        sum += v
+    return sum
+
+managed fn sum_both(a: vector[i64], b: vector[i64]) -> i64:
+    first = spawn(total, a)
+    second = spawn(total, b)
+    return first + second

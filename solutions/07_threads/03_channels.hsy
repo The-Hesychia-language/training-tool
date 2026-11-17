@@ -1,0 +1,19 @@
+from thread import spawn, channel
+
+managed fn produce(tx: sender[i64], n: i64):
+    for i in range(1, n + 1):
+        tx.send(i * i)
+
+managed fn sum_of_squares(n: i64) -> i64:
+    tx, rx = channel[i64]()
+    t = spawn(produce, tx, n)
+    total = 0
+    going = True
+    while going:
+        got = rx.receive()
+        if got is None:
+            going = False
+        else:
+            total += got
+    t.join()
+    return total

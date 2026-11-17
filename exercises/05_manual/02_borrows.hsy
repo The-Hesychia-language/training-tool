@@ -1,0 +1,17 @@
+# In `manual`, a call says how it hands each value over:
+#     f(&v)       lends `v` for reading;
+#     f(&mut v)   lends it for changing, and `v` must be `mut`;
+#     f(v)        gives it away, to an `owned` parameter.
+#
+# FIX: `countdown(3)` should give [3, 2, 1].
+
+manual fn add(values: &mut vector[i64], x: i64):
+    values.push(x)
+
+manual fn countdown(start: i64) -> vector[i64]:
+    const values: vector[i64] = []
+    mut n: i64 = start
+    while n > 0:
+        add(values, n)
+        n -= 1
+    return values

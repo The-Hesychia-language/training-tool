@@ -1,0 +1,9 @@
+# A value that may be missing is an `Optional`: it is the value, or `None`.
+# `d.get(key)` gives one. It cannot be used as the value before it is tested:
+# after `if x is None: ...return`, or inside `if x is not None:`, it is one.
+#
+# FIX: `price_of` should give the price of `name`, or 0 when the shop has none.
+
+managed fn price_of(prices: dict[str, i64], name: str) -> i64:
+    price = prices.get(name)
+    return price

@@ -1,0 +1,4 @@
+from io import print
+
+managed fn main():
+    print("Hello, Hesychia!")

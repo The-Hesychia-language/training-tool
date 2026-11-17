@@ -1,0 +1,7 @@
+# BUILD: in `manual`, `reversed` gives a new vector with the items of `values`
+# from the last to the first; `values` itself is only read.
+#
+# `range(n)` counts up from 0; position `len(values) - 1 - i` counts down.
+
+manual fn reversed(values: &vector[i64]) -> vector[i64]:
+    return []

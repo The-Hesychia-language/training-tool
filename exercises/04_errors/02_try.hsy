@@ -1,0 +1,13 @@
+# A function that cannot do its work raises an error, a value of a type of its
+# own. `i64("12")` reads a number, and raises `ParseError` on text like "12x".
+# An error goes up from caller to caller until a `try` catches it:
+#
+#     try:
+#         n = i64(text)
+#     except ParseError as e:
+#         ...            # e.text is the text that was refused
+#
+# FIX: `to_number` should give -1 for a text that is not a number.
+
+managed fn to_number(text: str) -> i64:
+    return i64(text)

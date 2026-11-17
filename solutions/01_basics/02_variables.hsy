@@ -1,0 +1,6 @@
+from io import print
+
+managed fn main():
+    apples = 3
+    apples += 4
+    print(f"{apples} apples")

@@ -1,0 +1,3 @@
+managed fn average(a: i64, b: i64) -> f64:
+    total = a + b
+    return f64(total) / 2.0

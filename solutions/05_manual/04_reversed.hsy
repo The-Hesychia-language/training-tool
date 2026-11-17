@@ -1,0 +1,5 @@
+manual fn reversed(values: &vector[i64]) -> vector[i64]:
+    mut out: vector[i64] = []
+    for i in range(len(values)):
+        out.push(values[len(values) - 1 - i])
+    return out

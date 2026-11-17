@@ -1,0 +1,9 @@
+# A function names the type of each parameter and of its result. Whole numbers are
+# `i64` here (others exist: `i32`, `u8`...), decimals are `f64`.
+#
+# FIX: `average` should give 2.5 for 2 and 3. `/` between two integers drops the
+# decimal part: convert to `f64` before dividing, not after.
+
+managed fn average(a: i64, b: i64) -> f64:
+    total = a + b
+    return f64(total / 2)

@@ -1,0 +1,10 @@
+manual fn add(values: &mut vector[i64], x: i64):
+    values.push(x)
+
+manual fn countdown(start: i64) -> vector[i64]:
+    mut values: vector[i64] = []
+    mut n: i64 = start
+    while n > 0:
+        add(&mut values, n)
+        n -= 1
+    return values

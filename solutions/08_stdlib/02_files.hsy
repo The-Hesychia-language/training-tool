@@ -1,0 +1,20 @@
+import io
+from io import print
+import fs
+
+managed fn save(path: str, lines: vector[str]):
+    f = fs.open(path, fs.Mode.Write)
+    for line in lines:
+        print(line, to=f)
+
+managed fn longest_line(path: str) -> str:
+    f = fs.open(path)
+    best = ""
+    going = True
+    while going:
+        line = io.read(f)
+        if line is None:
+            going = False
+        elif len(line) > len(best):
+            best = line
+    return best

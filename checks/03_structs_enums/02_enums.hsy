@@ -1,0 +1,8 @@
+# hint: Add the missing branch: `case Light.Red:` returning `Light.Green`.
+from testing import expect
+
+@test
+managed fn lights_follow_each_other():
+    expect(after(Light.Green) == Light.Orange)
+    expect(after(Light.Orange) == Light.Red)
+    expect(after(Light.Red) == Light.Green)

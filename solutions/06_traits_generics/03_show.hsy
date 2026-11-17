@@ -1,0 +1,6 @@
+manual struct Point(Show):
+    x: i64
+    y: i64
+
+    method show(&self) -> str:
+        return f"({self.x}, {self.y})"

@@ -1,0 +1,12 @@
+# hint: Declare `mut out: vector[i64] = []`, then `out.push(values[len(values) - 1 - i])` in a loop.
+from testing import equal
+
+@test
+managed fn reversed_turns_it_around():
+    const values: vector[i64] = [1, 2, 3]
+    equal(reversed(values), [3, 2, 1])
+    equal(values, [1, 2, 3])
+
+@test
+managed fn reversed_of_nothing():
+    equal(reversed(vector[i64]()), vector[i64]())

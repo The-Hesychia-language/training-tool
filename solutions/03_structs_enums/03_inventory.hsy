@@ -1,0 +1,22 @@
+managed struct Inventory:
+    items: dict[str, i64]
+
+    method add(self, name: str, count: i64):
+        if name in self.items:
+            self.items[name] += count
+        else:
+            self.items[name] = count
+
+    method count(self, name: str) -> i64:
+        if name in self.items:
+            return self.items[name]
+        return 0
+
+    method total(self) -> i64:
+        sum = 0
+        for _name, count in self.items.items():
+            sum += count
+        return sum
+
+managed fn empty_inventory() -> Inventory:
+    return Inventory(items=dict[str, i64]())

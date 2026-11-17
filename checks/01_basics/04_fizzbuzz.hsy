@@ -1,0 +1,13 @@
+# hint: Test `n % 15 == 0` first, or the "Fizz" case catches 15 before it.
+from testing import equal
+
+@test
+managed fn fizzbuzz_numbers():
+    equal(fizzbuzz(1), "1")
+    equal(fizzbuzz(7), "7")
+
+@test
+managed fn fizzbuzz_words():
+    equal(fizzbuzz(3), "Fizz")
+    equal(fizzbuzz(10), "Buzz")
+    equal(fizzbuzz(30), "FizzBuzz")

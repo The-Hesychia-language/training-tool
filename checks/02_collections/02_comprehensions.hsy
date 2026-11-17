@@ -1,0 +1,8 @@
+# hint: `[x * x for x in values if x % 2 == 0]`
+from testing import equal
+
+@test
+managed fn even_squares_keeps_the_even_ones():
+    equal(even_squares([1, 2, 3, 4]), [4, 16])
+    equal(even_squares([1, 3]), vector[i64]())
+    equal(even_squares([-2, 0]), [4, 0])

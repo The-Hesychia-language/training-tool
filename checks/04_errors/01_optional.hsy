@@ -1,0 +1,9 @@
+# hint: Before `return price`, add `if price is None:` with `return 0`.
+from testing import equal
+
+@test
+managed fn price_of_known_and_unknown():
+    prices = dict[str, i64]()
+    prices["tea"] = 3
+    equal(price_of(prices, "tea"), 3)
+    equal(price_of(prices, "gold"), 0)

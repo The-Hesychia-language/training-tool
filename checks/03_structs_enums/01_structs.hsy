@@ -1,0 +1,9 @@
+# hint: Every field needs a value: `Rectangle(width=side, height=side)`.
+from testing import equal
+
+@test
+managed fn square_has_equal_sides():
+    s = square(3.0)
+    equal(s.width, 3.0)
+    equal(s.height, 3.0)
+    equal(s.area(), 9.0)

@@ -1,0 +1,5 @@
+managed fn to_number(text: str) -> i64:
+    try:
+        return i64(text)
+    except ParseError as _e:
+        return -1

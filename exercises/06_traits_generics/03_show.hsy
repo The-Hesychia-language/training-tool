@@ -1,0 +1,9 @@
+# Some traits change what the language does with a struct. `Show` is how
+# f-strings write it: a struct that implements `Show` defines
+#     method show(&self) -> str
+#
+# BUILD: make `Point` implement `Show`, so that f"{Point(x=1, y=2)}" is "(1, 2)".
+
+manual struct Point:
+    x: i64
+    y: i64

@@ -1,0 +1,11 @@
+# In `managed` code, `x = 5` declares a variable, and assigning again changes it.
+# `const` makes a name that never changes. f-strings write values into text.
+#
+# FIX: this program should count the apples of both baskets, but it does not build.
+
+from io import print
+
+managed fn main():
+    const apples = 3
+    apples += 4
+    print(f"{apples} apples")

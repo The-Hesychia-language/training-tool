@@ -1,0 +1,12 @@
+trait Shape:
+    method area(&self) -> f64
+    method perimeter(&self) -> f64
+
+manual struct Square(Shape):
+    side: f64
+
+    method area(&self) -> f64:
+        return self.side * self.side
+
+    method perimeter(&self) -> f64:
+        return self.side * 4.0

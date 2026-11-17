@@ -1,0 +1,15 @@
+# A trait is a list of methods. A struct that names a trait, as in
+# `struct Square(Shape)`, promises to define every one of them, and code written
+# for the trait then works with the struct.
+#
+# FIX: `Square` does not keep its promise yet.
+
+trait Shape:
+    method area(&self) -> f64
+    method perimeter(&self) -> f64
+
+manual struct Square(Shape):
+    side: f64
+
+    method area(&self) -> f64:
+        return self.side * self.side

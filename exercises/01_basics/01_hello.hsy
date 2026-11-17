@@ -1,0 +1,8 @@
+# Welcome! Each exercise is a file to fix or to complete. Save it, and hsy-train
+# checks it again.
+#
+# FIX: `print` lives in the `io` module, and nothing is available before it is
+# imported. Import it, as the compiler's hint says.
+
+managed fn main():
+    print("Hello, Hesychia!")

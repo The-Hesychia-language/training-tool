@@ -1,0 +1,13 @@
+# A text, a vector, or a struct holding one owns memory, and has one owner.
+# Giving it to an `owned` parameter moves it: the variable is empty afterwards,
+# and the compiler refuses to read it. To keep it, give away a copy made with
+# `.copy()`, or lend it with `&` if the function only reads.
+#
+# FIX: `both("hey")` should give "hey HEY!".
+
+manual fn shout(owned text: str) -> str:
+    return text.upper() + "!"
+
+manual fn both(owned name: str) -> str:
+    const loud: str = shout(name)
+    return f"{name} {loud}"

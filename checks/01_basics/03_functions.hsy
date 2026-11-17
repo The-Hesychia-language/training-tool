@@ -1,0 +1,7 @@
+# hint: `f64(total) / 2.0` divides decimals; `f64(total / 2)` converts too late.
+from testing import equal
+
+@test
+managed fn average_keeps_the_decimals():
+    equal(average(2, 3), 2.5)
+    equal(average(4, 4), 4.0)

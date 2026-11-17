@@ -1,0 +1,6 @@
+manual fn count_of[T: Equal](values: &vector[T], wanted: &T) -> i64:
+    mut n: i64 = 0
+    for i in range(len(values)):
+        if values[i] == wanted:
+            n += 1
+    return n

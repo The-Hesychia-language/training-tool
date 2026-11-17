@@ -1,0 +1,11 @@
+# BUILD: your first program to write. `fizzbuzz(n)` gives:
+#   "FizzBuzz" when n is divisible by 3 and by 5,
+#   "Fizz" when it is divisible by 3,
+#   "Buzz" when it is divisible by 5,
+#   and the number itself as text otherwise: fizzbuzz(7) is "7".
+#
+# You will need `if` / `elif` / `else`, `%` (the remainder), and `str(n)` or an
+# f-string to turn a number into text.
+
+managed fn fizzbuzz(n: i64) -> str:
+    return ""

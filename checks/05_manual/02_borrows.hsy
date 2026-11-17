@@ -1,0 +1,8 @@
+# hint: Lend it for changing: `add(&mut values, n)`.
+# hint: What is lent with `&mut` must be declared `mut`.
+from testing import equal
+
+@test
+managed fn countdown_counts_down():
+    equal(countdown(3), [3, 2, 1])
+    equal(countdown(0), vector[i64]())

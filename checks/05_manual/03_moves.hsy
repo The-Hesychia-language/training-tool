@@ -1,0 +1,6 @@
+# hint: `shout(name)` moves `name` away. Give it a copy: `shout(name.copy())`.
+from testing import equal
+
+@test
+managed fn both_keeps_the_name():
+    equal(both("hey"), "hey HEY!")

@@ -1,0 +1,11 @@
+# The `re` module finds patterns in text, in the syntax of Python's `re`:
+#     re.find_all("[a-z]+", "ab 12 cd")    gives ['ab', 'cd']
+# In a pattern, `[0-9]` is a digit and `+` means one or more.
+#
+# BUILD: `numbers_in` gives the whole numbers written in `text`, in order:
+# numbers_in("3 apples, 12 pears") is [3, 12].
+
+import re
+
+managed fn numbers_in(text: str) -> vector[i64]:
+    return vector[i64]()

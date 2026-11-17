@@ -1,0 +1,8 @@
+# A list comprehension builds a vector from another one:
+#     [x * 2 for x in values if x > 0]
+#
+# BUILD: `even_squares` gives the squares of the even numbers of `values`, in
+# order: even_squares([1, 2, 3, 4]) is [4, 16].
+
+managed fn even_squares(values: vector[i64]) -> vector[i64]:
+    return vector[i64]()

@@ -1,0 +1,24 @@
+# hint: `match value:` with `case Value.List(items):`, then loop over `items`.
+# hint: Each item is a `Value` too: match it with `case Value.Number(number):` and `case _:`.
+import fs as files
+import io as streams
+from io import print as write
+from testing import equal
+
+managed fn sum_of_text(text: str) -> f64:
+    f = files.open("hsy-train-numbers.json", files.Mode.Write)
+    write(text, to=f)
+    streams.close(f)
+    got = sum_of("hsy-train-numbers.json")
+    files.remove("hsy-train-numbers.json")
+    return got
+
+@test
+managed fn numbers_are_added():
+    equal(sum_of_text("[1, 2.5, 4]"), 7.5)
+    equal(sum_of_text("[]"), 0.0)
+
+@test
+managed fn the_rest_is_skipped():
+    equal(sum_of_text("[1, \"two\", null, 3]"), 4.0)
+    equal(sum_of_text("{\"a\": 1}"), 0.0)

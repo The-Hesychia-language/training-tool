@@ -1,0 +1,6 @@
+[package]
+name = "hsy-train"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.88"
+description = "Exercises to learn the Hesychia language: fix programs, and build small ones"

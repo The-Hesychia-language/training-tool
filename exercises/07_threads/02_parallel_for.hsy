@@ -1,0 +1,14 @@
+# `parallel for` runs its body on every core at once. Two threads changing one
+# plain variable would lose counts, so the compiler refuses it. An `atomic` is a
+# number made for this: `hits = atomic(0)`, `hits.add(1)`, `hits.load()`.
+#
+# FIX: `multiples_of_three(limit)` counts them from 0 up to `limit`, not included.
+
+from thread import atomic
+
+managed fn multiples_of_three(limit: i64) -> i64:
+    hits = 0
+    parallel for i in range(limit):
+        if i % 3 == 0:
+            hits += 1
+    return hits

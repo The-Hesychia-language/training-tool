@@ -1,0 +1,6 @@
+# hint: `first` is a thread, not a number yet: its result is `first.join()`.
+from testing import equal
+
+@test
+managed fn sum_both_adds_them():
+    equal(sum_both([1, 2, 3], [10, 20]), 36)

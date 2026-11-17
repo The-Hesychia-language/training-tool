@@ -1,0 +1,7 @@
+# hint: `best` changes, and holds an `i64`: `mut best: i64 = values[0]`.
+from testing import equal
+
+@test
+managed fn largest_finds_it():
+    equal(largest([3, 9, 4]), 9)
+    equal(largest([-5, -2]), -2)

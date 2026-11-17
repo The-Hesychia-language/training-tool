@@ -1,0 +1,13 @@
+managed enum Light:
+    Green
+    Orange
+    Red
+
+managed fn after(light: Light) -> Light:
+    match light:
+        case Light.Green:
+            return Light.Orange
+        case Light.Orange:
+            return Light.Red
+        case Light.Red:
+            return Light.Green

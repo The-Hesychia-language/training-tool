@@ -1,0 +1,14 @@
+# A struct groups named fields, and has methods that reach them through `self`.
+# It is built by naming every field: `Rectangle(width=2.0, height=3.0)`.
+#
+# FIX: `square` should build a rectangle whose sides are equal.
+
+managed struct Rectangle:
+    width: f64
+    height: f64
+
+    method area(self) -> f64:
+        return self.width * self.height
+
+managed fn square(side: f64) -> Rectangle:
+    return Rectangle(width=side)

@@ -1,0 +1,14 @@
+# hint: Loop with `for word in text.lower().split():`, and test `word in counts` before `+= 1`.
+from testing import equal
+
+@test
+managed fn count_words_counts():
+    counts = count_words("The cat the DOG the")
+    equal(len(counts), 3)
+    equal(counts["the"], 3)
+    equal(counts["cat"], 1)
+    equal(counts["dog"], 1)
+
+@test
+managed fn count_words_of_nothing():
+    equal(len(count_words("")), 0)
